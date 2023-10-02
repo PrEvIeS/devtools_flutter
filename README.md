@@ -27,14 +27,6 @@ flutter pub run intl_utils:generate
 flutter pub run build_runner build --delete-conflicting-outputs
 ```
 
-**Step 3:**
-Go to `/packages/rest_client` and execute the following command in terminal to generate model and
-api client:
-
-```cmd
-flutter pub get && flutter pub run build_runner build --delete-conflicting-outputs
-```
-
 **Whenever change freezed file, assets, api**
 
 Run command
