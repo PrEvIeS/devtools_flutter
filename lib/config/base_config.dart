@@ -4,4 +4,6 @@ abstract class BaseConfig {
   String get baseUrl;
 
   Level get logLevel;
+
+  bool get useNetwork;
 }

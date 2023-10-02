@@ -32,7 +32,7 @@ flutter pub run build_runner build --delete-conflicting-outputs
 Run command
 
 ```cmd
-flutter pub get && flutter pub run build_runner build --delete-conflicting-outputs
+flutter pub get && dart run build_runner build --delete-conflicting-outputs
 ```
 
 ## Folder structure

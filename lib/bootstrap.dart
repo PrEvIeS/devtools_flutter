@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_template/config/base_config.dart';
 import 'package:flutter_template/core/bloc/bloc_observer.dart';
+import 'package:flutter_template/data/repositories/student/student_repository.dart';
+import 'package:flutter_template/data/repositories/student/student_repository_interface.dart';
 import 'package:flutter_template/services/app_service/app_service.dart';
 import 'package:flutter_template/services/app_service/app_service_impl.dart';
 import 'package:flutter_template/services/crashlytics_service/crashlytics_service.dart';
@@ -11,6 +13,7 @@ import 'package:flutter_template/services/crashlytics_service/firebase_crashlyti
 import 'package:flutter_template/services/http_service/dio.dart';
 import 'package:flutter_template/usecases/app/bloc/app_bloc.dart';
 import 'package:flutter_template/usecases/app/view/app.dart';
+import 'package:flutter_template/usecases/home/bloc/home_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logger/logger.dart';
@@ -43,6 +46,17 @@ Future<void> bootstrap({
               lineLength: 100,
             ),
           ),
+        ),
+      )
+      ..registerFactory<StudentRepositoryInterface>(
+        () => StudentRepository(
+          dio: GetIt.instance(instanceName: DioClient.dioInstanceName),
+        ),
+      )
+      ..registerLazySingleton<HomeBloc>(
+        () => HomeBloc(
+          studentRepository: GetIt.instance<StudentRepositoryInterface>(),
+          useNetwork: config.useNetwork,
         ),
       )
       ..registerLazySingleton<AppBloc>(

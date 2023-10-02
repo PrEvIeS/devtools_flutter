@@ -1,5 +1,5 @@
 import 'package:flutter_template/usecases/app/view/app_director.dart';
-import 'package:flutter_template/usecases/home/home_page.dart';
+import 'package:flutter_template/usecases/home/view/home_page.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRouter {
