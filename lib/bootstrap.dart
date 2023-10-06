@@ -51,6 +51,7 @@ Future<void> bootstrap({
       ..registerFactory<StudentRepositoryInterface>(
         () => StudentRepository(
           dio: GetIt.instance(instanceName: DioClient.dioInstanceName),
+          useNetwork: config.useNetwork,
         ),
       )
       ..registerLazySingleton<HomeBloc>(

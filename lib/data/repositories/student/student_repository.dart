@@ -3,9 +3,11 @@ import 'package:flutter_template/data/models/student/student.dart';
 import 'package:flutter_template/data/repositories/student/student_repository_interface.dart';
 
 class StudentRepository implements StudentRepositoryInterface {
-  StudentRepository({required Dio dio}) : _studentDio = dio;
+  StudentRepository({required Dio dio, this.useNetwork = false})
+      : _studentDio = dio;
 
   late final Dio _studentDio;
+  late final bool useNetwork;
   final List<Student> localStudents = [
     Student(name: 'Test', mark: 1.5, id: 0),
     Student(name: 'Test', mark: 2.5, isActivist: true, id: 1),
@@ -14,27 +16,45 @@ class StudentRepository implements StudentRepositoryInterface {
   ];
 
   @override
-  Future<List<Student>> getNetworkStudentList() async {
+  Future<List<Student>> getStudentList() async {
     List<Student> students = [];
-    Response<dynamic> studentsData = await _studentDio.get('users');
-
-    return students;
-  }
-
-  @override
-  List<Student> getLocalStudentList() {
-    print(localStudents);
-
-    return localStudents;
+    if (useNetwork) {
+      Response remoteStudent =
+          await _studentDio.get('users', queryParameters: {'limit': 50});
+      List<dynamic> response = remoteStudent.data['users'];
+      List<Student> list = response.map((dynamic e) {
+        return Student.fromJson(e);
+      }).toList();
+      students = list;
+    } else {
+      students = localStudents;
+    }
+    return List<Student>.from(students);
   }
 
   @override
   void markStudent(int studentId) {
-    localStudents[studentId] = Student(
-      name: localStudents[studentId].name,
-      mark: localStudents[studentId].mark,
-      isActivist: true,
-      id: studentId,
+    final Student student =
+        localStudents.firstWhere((element) => element.id == studentId);
+    localStudents[studentId] = student.copyWith(
+      isActivist: !student.isActivist,
     );
+  }
+
+  @override
+  Future<List<Student>> getActivistList() async {
+    List<Student> activists = [];
+    if (useNetwork) {
+      Response remoteStudent =
+          await _studentDio.get('users', queryParameters: {'limit': 50});
+      List<dynamic> response = remoteStudent.data['users'];
+      List<Student> list = response.map((dynamic e) {
+        return Student.fromJson(e);
+      }).toList();
+      activists = list.where((element) => element.isActivist).toList();
+    } else {
+      activists = localStudents.where((element) => element.isActivist).toList();
+    }
+    return List<Student>.from(activists);
   }
 }

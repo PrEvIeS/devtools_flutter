@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_template/data/models/student/student.dart';
 import 'package:flutter_template/usecases/home/bloc/home_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -12,12 +11,12 @@ class StudentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: Card(
         elevation: 0,
         color: Colors.blue,
         child: Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           child: ListTile(
             onLongPress: () {
               showModalBottomSheet<void>(
@@ -30,11 +29,14 @@ class StudentCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          const Text('Перевести в активисты?'),
+                          student.isActivist
+                              ? const Text('Убрать из активистов?')
+                              : const Text('Перевести в активисты?'),
                           ElevatedButton(
                             child: const Text('Да'),
                             onPressed: () {
-                              GetIt.instance<HomeBloc>().add(HomeEvent.markStudent(studentId: student.id));
+                              GetIt.instance<HomeBloc>().add(
+                                  HomeEvent.markStudent(studentId: student.id));
                               Navigator.pop(context);
                             },
                           ),
@@ -51,15 +53,15 @@ class StudentCard extends StatelessWidget {
             },
             leading: student.remoteImage != null
                 ? Image.network(student.remoteImage!)
-                : Icon(Icons.account_circle, size: 55),
+                : const Icon(Icons.account_circle, size: 55),
             title: Text(student.name),
             subtitle: Text(student.mark.toString()),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Является ли студентом?"),
-                student.isActivist ? Icon(Icons.done) : Icon(Icons.close)
+                const Text("Является ли активистом?"),
+                student.isActivist ? const Icon(Icons.done) : const Icon(Icons.close)
               ],
             ),
           ),

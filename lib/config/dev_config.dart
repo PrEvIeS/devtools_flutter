@@ -9,5 +9,5 @@ class DevConfig implements BaseConfig {
   Level get logLevel => Level.trace;
 
   @override
-  bool get useNetwork => false;
+  bool get useNetwork => true;
 }
